@@ -1,2 +1,2 @@
 # b1oki.noip.me
-LSD Pages
+LSD [Local Server Dedicated] Pages
