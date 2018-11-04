@@ -1,11 +1,12 @@
 #!python3
 
 from flask import Flask
+from flask_cors import cross_origin
 
 app = Flask(__name__)
 
 
-@app.route('/')
+@app.route('/', methods=['GET'])
 def root():
     html = '''<html>
 <head>
@@ -24,7 +25,8 @@ def root():
     return html
 
 
-@app.route('/health.php')
+@app.route('/health.php', methods=['GET'])
+@cross_origin(origins=['https://alexandersobyanin.ru'], methods=['GET'])
 def health():
     return '1'
 
