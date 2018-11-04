@@ -28,7 +28,7 @@ def root():
 @app.route('/health.php', methods=['GET'])
 @cross_origin(origins=['https://alexandersobyanin.ru'], methods=['GET'])
 def health():
-    return '1'
+    return '{"health":1}'
 
 
 if __name__ == '__main__':
