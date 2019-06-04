@@ -1,5 +1,5 @@
 #!python3
-
+import os
 from flask import Flask
 from flask import render_template
 from flask_cors import cross_origin
@@ -20,7 +20,7 @@ def health():
 
 @app.route('/ads.txt', methods=['GET'])
 def ads():
-    return 'google.com, pub-8901069185828760, DIRECT, f08c47fec0942fa0'
+    return 'google.com, pub-{id}, DIRECT, f08c47fec0942fa0'.format(id=os.environ['GOOGLE_ADSENSE_ID'])
 
 
 if __name__ == '__main__':
