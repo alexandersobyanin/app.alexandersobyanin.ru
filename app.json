@@ -1,0 +1,10 @@
+{
+  "name": "b1oki App Pages",
+  "description": "A WebServer Python app, which contain b1oki personal website backend.",
+  "keywords": ["python", "cv", "bots" ],
+  "repository": "https://github.com/b1oki/b1oki.noip.me",
+  "addons": [ "heroku-postgresql" ],
+  "image": "heroku/python",
+  "environments": {
+  }
+}
