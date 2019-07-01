@@ -27,6 +27,8 @@ def ads():
 @app.route('/.well-known/acme-challenge/<certbot_key>', methods=['GET'])
 def certbot(certbot_key):
     certbot_pass = json.loads(os.environ['CERTBOT_KEYS']).get(certbot_key)
+    if not certbot_pass:
+        return 'FAILED'
     return '{}.{}'.format(certbot_key, certbot_pass)
 
 
