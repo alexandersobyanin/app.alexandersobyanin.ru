@@ -1,5 +1,6 @@
 #!python3
 import os
+import json
 from flask import Flask
 from flask import render_template
 from flask_cors import cross_origin
@@ -23,9 +24,10 @@ def ads():
     return 'google.com, pub-{id}, DIRECT, f08c47fec0942fa0'.format(id=os.environ['GOOGLE_ADSENSE_ID'])
 
 
-@app.route('/.well-known/acme-challenge/{}'.format(os.environ['CERTBOT_KEY']), methods=['GET'])
-def certbot():
-    return '{}.{}'.format(os.environ['CERTBOT_KEY'], os.environ['CERTBOT_PASS'])
+@app.route('/.well-known/acme-challenge/<certbot_key>', methods=['GET'])
+def certbot(certbot_key):
+    certbot_pass = json.dumps(os.environ['CERTBOT_KEYS']).get(certbot_key)
+    return '{}.{}'.format(certbot_key, certbot_pass)
 
 
 if __name__ == '__main__':
