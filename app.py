@@ -23,5 +23,10 @@ def ads():
     return 'google.com, pub-{id}, DIRECT, f08c47fec0942fa0'.format(id=os.environ['GOOGLE_ADSENSE_ID'])
 
 
+@app.route('/.well-known/acme-challenge/'.format(os.environ['CERTBOT_KEY']), methods=['GET'])
+def certbot():
+    return '{}.{}'.format(os.environ['CERTBOT_KEY'], os.environ['CERTBOT_PASS'])
+
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
