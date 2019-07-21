@@ -4,13 +4,16 @@ import json
 from flask import Flask
 from flask import render_template
 from flask_cors import cross_origin
+from seo import SEO
 
 app = Flask(__name__, static_url_path='/static')
+
+global_context = {'SEO': SEO}
 
 
 @app.route('/', methods=['GET'])
 def root():
-    return render_template('root.html')
+    return render_template('root.html', **global_context)
 
 
 @app.route('/health.php', methods=['GET'])
@@ -21,7 +24,7 @@ def health():
 
 @app.route('/ads.txt', methods=['GET'])
 def ads():
-    return 'google.com, pub-{id}, DIRECT, f08c47fec0942fa0'.format(id=os.environ['GOOGLE_ADSENSE_ID'])
+    return 'google.com, pub-{id}, DIRECT, f08c47fec0942fa0'.format(id=SEO.google.adsense_id)
 
 
 @app.route('/.well-known/acme-challenge/<certbot_key>', methods=['GET'])
