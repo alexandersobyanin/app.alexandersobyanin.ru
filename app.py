@@ -3,10 +3,12 @@ import os
 import json
 from flask import Flask
 from flask import render_template
+from flask_sslify import SSLify
 from flask_cors import cross_origin
 from seo import SEO
 
 app = Flask(__name__, static_url_path='/static')
+sslify = SSLify(app)
 
 global_context = {'SEO': SEO}
 
