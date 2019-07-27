@@ -8,6 +8,7 @@ from flask_cors import cross_origin
 from seo import SEO
 
 app = Flask(__name__, static_url_path='/static')
+app.debug = False
 sslify = SSLify(app)
 
 global_context = {'SEO': SEO}
