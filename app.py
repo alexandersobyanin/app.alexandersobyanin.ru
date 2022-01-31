@@ -1,7 +1,7 @@
 #!python3
 import os
 import json
-import requests
+import urllib3
 from flask import Flask
 from flask import Response
 from flask import request
@@ -9,7 +9,6 @@ from flask import render_template
 from flask_sslify import SSLify
 from flask_cors import cross_origin
 from seo import SEO
-from tracker_announce import tracker_announce_proxy
 
 app = Flask(__name__, static_url_path='/static')
 app.debug = False
@@ -47,8 +46,11 @@ def tracker_announce(tracker_path):
     pass_key = request.args.get('pk')
     if pass_key != os.environ.get('tracker_pass_key'):
         return Response(response='Unauthorized', status=401)
-    # response = requests.get(f'http://{tracker_path}')
-    return f'path={tracker_path}; pk={pass_key};'
+    http = urllib3.PoolManager()
+    response = http.request('GET', f'http://{tracker_path}', fields={'pk': pass_key})
+    content_type = response.getheader('Content-Type', 'text/plain')
+    http_code = response.status
+    return f'path={tracker_path}; pk={pass_key}; code={http_code}; type={content_type};'
 
 
 if __name__ == '__main__':
