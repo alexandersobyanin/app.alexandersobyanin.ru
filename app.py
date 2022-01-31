@@ -48,7 +48,6 @@ def tracker_announce(tracker_path):
     if pass_key != os.environ.get('tracker_pass_key'):
         return Response(response='Unauthorized', status=401)
     url = f'http://{tracker_path}?pk={pass_key}'
-    return f'path={tracker_path}; pk={pass_key}; url={url};'
     try:
         req = urllib.request.Request(url)
         with urllib.request.urlopen(req) as response:
