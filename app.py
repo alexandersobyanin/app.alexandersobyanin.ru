@@ -2,10 +2,12 @@
 import os
 import json
 from flask import Flask
+from flask import request
 from flask import render_template
 from flask_sslify import SSLify
 from flask_cors import cross_origin
 from seo import SEO
+from tracker_announce import tracker_announce_proxy
 
 app = Flask(__name__, static_url_path='/static')
 app.debug = False
@@ -36,6 +38,11 @@ def certbot(certbot_key):
     if not certbot_pass:
         return 'FAILED'
     return '{}.{}'.format(certbot_key, certbot_pass)
+
+
+@app.route('/tracker_announce/<path:tracker_path>', methods=['GET'])
+def tracker_announce(tracker_path):
+    return tracker_announce_proxy(tracker_path=tracker_path, pass_key=request.args.get('pk'))
 
 
 if __name__ == '__main__':
