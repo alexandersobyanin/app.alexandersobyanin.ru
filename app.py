@@ -1,6 +1,7 @@
 #!python3
 import os
 import json
+import socket
 import urllib.error
 import urllib.request
 from flask import Flask
@@ -49,14 +50,13 @@ def tracker_announce(tracker_path):
         return Response(response='Unauthorized', status=401)
     url = f'http://{tracker_path}?pk={pass_key}'
     try:
-        with urllib.request.urlopen(url) as response:
+        with urllib.request.urlopen(url, timeout=1) as response:
             code = response.status
             content_type = response.getheader('Content-Type')
-            return Response(response=f'code={code}; type={content_type}', status=200)
-    except urllib.error.URLError as e:
-        return Response(response=f'We failed to reach a tracker: {e.reason}', status=502)
-    else:
-        return Response(response='OK', status=200)
+            content = response.read().decode('utf-8')
+            return Response(response=f'code={code}; type={content_type}; content={content}', status=code)
+    except (urllib.error.HTTPError, urllib.error.URLError, socket.timeout) as e:
+        return Response(response=f'We failed to reach a tracker: {e}', status=200)
 
 
 if __name__ == '__main__':
