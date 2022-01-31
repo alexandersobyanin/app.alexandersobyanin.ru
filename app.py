@@ -51,12 +51,14 @@ def tracker_announce(tracker_path):
     url = f'http://{tracker_path}?pk={pass_key}'
     try:
         with urllib.request.urlopen(url, timeout=1) as response:
-            code = response.status
-            content_type = response.getheader('Content-Type')
-            content = response.read().decode('utf-8')
-            return Response(response=f'code={code}; type={content_type}; content={content}', status=code)
+            response_code = response.status
+            response_content = response.read()
+            response_content_type = response.getheader('Content-Type')
     except (urllib.error.HTTPError, urllib.error.URLError, socket.timeout) as e:
-        return Response(response=f'We failed to reach a tracker: {e}', status=200)
+        response_code = 502
+        response_content = f'We failed to reach a tracker: {e}'
+        response_content_type = 'text/html; charset=UTF-8;'
+    return Response(response=response_content, content_type=response_content_type, status=response_code)
 
 
 if __name__ == '__main__':
