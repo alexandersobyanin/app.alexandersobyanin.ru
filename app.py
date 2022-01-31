@@ -49,9 +49,10 @@ def tracker_announce(tracker_path):
         return Response(response='Unauthorized', status=401)
     url = f'http://{tracker_path}?pk={pass_key}'
     try:
-        req = urllib.request.Request(url)
-        with urllib.request.urlopen(req) as response:
-            return response
+        with urllib.request.urlopen(url) as response:
+            code = response.status
+            content_type = response.getheader('Content-Type')
+            return Response(response=f'code={code}; type={content_type}', status=200)
     except urllib.error.URLError as e:
         return Response(response=f'We failed to reach a tracker: {e.reason}', status=502)
     else:
