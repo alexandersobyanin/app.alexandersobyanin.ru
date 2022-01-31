@@ -1,7 +1,9 @@
 #!python3
 import os
 import json
+import requests
 from flask import Flask
+from flask import Response
 from flask import request
 from flask import render_template
 from flask_sslify import SSLify
@@ -42,7 +44,11 @@ def certbot(certbot_key):
 
 @app.route('/tracker_announce/<path:tracker_path>', methods=['GET'])
 def tracker_announce(tracker_path):
-    return tracker_announce_proxy(tracker_path=tracker_path, pass_key=request.args.get('pk'))
+    pass_key = request.args.get('pk')
+    if pass_key != os.environ.get('tracker_pass_key'):
+        return Response(response='Unauthorized', status=401)
+    # response = requests.get(f'http://{tracker_path}')
+    return f'path={tracker_path}; pk={pass_key};'
 
 
 if __name__ == '__main__':
