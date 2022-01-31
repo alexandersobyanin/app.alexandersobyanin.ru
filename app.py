@@ -1,7 +1,8 @@
 #!python3
 import os
 import json
-import urllib3
+import urllib.error
+import urllib.request
 from flask import Flask
 from flask import Response
 from flask import request
@@ -46,11 +47,16 @@ def tracker_announce(tracker_path):
     pass_key = request.args.get('pk')
     if pass_key != os.environ.get('tracker_pass_key'):
         return Response(response='Unauthorized', status=401)
-    http = urllib3.PoolManager()
-    response = http.request('GET', f'http://{tracker_path}', fields={'pk': pass_key})
-    content_type = response.getheader('Content-Type', 'text/plain')
-    http_code = response.status
-    return f'path={tracker_path}; pk={pass_key}; code={http_code}; type={content_type};'
+    url = f'http://{tracker_path}?pk={pass_key}'
+    return f'path={tracker_path}; pk={pass_key}; url={url};'
+    try:
+        req = urllib.request.Request(url)
+        with urllib.request.urlopen(req) as response:
+            return response
+    except urllib.error.URLError as e:
+        return Response(response=f'We failed to reach a tracker: {e.reason}', status=502)
+    else:
+        return Response(response='OK', status=200)
 
 
 if __name__ == '__main__':
