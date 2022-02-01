@@ -3,6 +3,7 @@ import os
 import json
 import socket
 import urllib.error
+import urllib.parse
 import urllib.request
 from flask import Flask
 from flask import Response
@@ -48,7 +49,8 @@ def tracker_announce(tracker_path):
     pass_key = request.args.get('pk')
     if pass_key != os.environ.get('tracker_pass_key'):
         return Response(response='Unauthorized', status=401)
-    url = f'http://{tracker_path}?{request.args}'
+    params = urllib.parse.urlencode(request.args)
+    url = f'http://{tracker_path}?{params}'
     return Response(response=f'url={url}', status=200)
     try:
         with urllib.request.urlopen(url, timeout=1) as response:
