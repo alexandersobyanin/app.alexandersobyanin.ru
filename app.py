@@ -70,5 +70,23 @@ def csv_to_gpx_form():
     return render_template('csv_to_gpx/form.html', **global_context)
 
 
+@app.route('/csv_to_gpx/', methods=['POST'])
+def csv_to_gpx_process():
+    def generate_gpx():
+        for row in gpx_rows:
+            yield f"{','.join(row)}\n"
+    if 'file' not in request.files:
+        return Response(response='No file part', status=400)
+    file = request.files['file']
+    if file.filename == '':
+        return Response(response='No selected file', status=400)
+    if file and file.filename.rsplit('.', 1)[1].lower() != 'csv':
+        return Response(response='No allowed file', status=400)
+    csv_stream = file.stream
+    csv_stream.seek(0)
+    gpx_rows = ['1', '2', '3']
+    return app.response_class(generate_gpx(), mimetype='application/gpx+xml')
+
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
