@@ -67,7 +67,7 @@ def tracker_announce(tracker_path):
 
 @app.route('/csv_to_gpx/', methods=['GET'])
 def csv_to_gpx_form():
-    return render_template('csv_to_gpx/form.html')
+    return render_template('csv_to_gpx/form.html', **global_context)
 
 
 if __name__ == '__main__':
