@@ -84,8 +84,12 @@ def csv_to_gpx_process():
         return Response(response='No allowed file', status=400)
     csv_stream = file.stream
     csv_stream.seek(0)
-    gpx_rows = ['1', '2', '3']
-    return app.response_class(generate_gpx(), mimetype='application/gpx+xml')
+    gpx_rows = [f'filename={file.filename}', ]
+    return app.response_class(
+        generate_gpx(),
+        mimetype='application/gpx+xml',
+        headers={'Content-Disposition': "attachment; filename=track.gpx"}
+    )
 
 
 if __name__ == '__main__':
