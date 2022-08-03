@@ -11,6 +11,7 @@ from flask import request
 from flask import render_template
 from flask_sslify import SSLify
 from flask_cors import cross_origin
+from werkzeug.utils import secure_filename
 from seo import SEO
 
 app = Flask(__name__, static_url_path='/static')
@@ -62,6 +63,11 @@ def tracker_announce(tracker_path):
         response_content = f'We failed to reach a tracker: {e}'
         response_content_type = 'text/html; charset=UTF-8;'
     return Response(response=response_content, content_type=response_content_type, status=response_code)
+
+
+@app.route('/csv_to_gpx/', methods=['GET'])
+def csv_to_gpx_form():
+    return render_template('csv_to_gpx/form.html')
 
 
 if __name__ == '__main__':
