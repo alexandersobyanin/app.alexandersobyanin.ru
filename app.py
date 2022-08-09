@@ -138,7 +138,7 @@ def csv_to_gpx_process():
         f'  <bounds minlat="{min_lat}" minlon="{min_lon}" maxlat="{max_lat}" maxlon="{max_lon}"/>',
         ' </metadata>',
         ' <trk>',
-        f'  <name>{file.replace(".csv", "")}</name>',
+        f'  <name>{file.filename.replace(".csv", "")}</name>',
         '  <trkseg>',
     ]
     gpx_rows.extend([
@@ -149,7 +149,7 @@ def csv_to_gpx_process():
     return app.response_class(
         generate_gpx(),
         mimetype='application/gpx+xml',
-        headers={'Content-Disposition': f'attachment; filename={file.replace(".csv", ".gpx")}'}
+        headers={'Content-Disposition': f'attachment; filename={file.filename.replace(".csv", ".gpx")}'}
     )
 
 
