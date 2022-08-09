@@ -134,13 +134,31 @@ def csv_to_gpx_process():
         ' xmlns="http://www.topografix.com/GPX/1/1"',
         ' xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd">',
         ' <metadata>',
+        f'  <link href="https://app.alexandersobyanin.ru/csv_to_gpx/">',
+        f'   <text>CSV to GPX</text>',
+        f'  </link>',
         f'  <time>{start_time.isoformat()}</time>',
         f'  <bounds minlat="{min_lat}" minlon="{min_lon}" maxlat="{max_lat}" maxlon="{max_lon}"/>',
         ' </metadata>',
         ' <trk>',
-        f'  <name>{file.filename.replace(".csv", "")}</name>',
+        f'  <name>{file.filename.replace(".csv", "")} speed={max_gps_speed} pwm={max_pwm}</name>',
         '  <trkseg>',
     ]
+    file.seek(0)
+    csv_reader = csv.DictReader(codecs.iterdecode(file, 'utf-8'))
+    for row in csv_reader:
+        latitude = row['latitude']
+        longitude = row['longitude']
+        gps_speed = row['gps_speed']
+        altitude = row['gps_alt']
+        gps_time = datetime.datetime.strptime(f"{row['date']} {row['time']}", '%Y-%m-%d %H:%M:%S.%f')
+        gpx_rows.extend([
+            f'  <trkpt lat="{latitude}" lon="{longitude}">',
+            f'   <speed>{gps_speed}</speed>',
+            f'   <ele>{altitude}</ele>',
+            f'   <time>{gps_time}</time>',
+            '  </trkpt>'
+        ])
     gpx_rows.extend([
         '  </trkseg>',
         ' </trk>',
