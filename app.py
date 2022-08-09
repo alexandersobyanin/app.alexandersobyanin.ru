@@ -99,6 +99,8 @@ def csv_to_gpx_process():
         latitude = float(row['latitude'])
         longitude = float(row['longitude'])
         gps_speed = float(row['gps_speed'])
+        speed = float(row['speed'])
+        pwm = float(row['pwm'])
         if start_time is None:
             start_time = datetime.datetime.strptime(f"{row['date']} {row['time']}", '%Y-%m-%d %H:%M:%S.%f')
         if min_lat is None:
@@ -118,17 +120,17 @@ def csv_to_gpx_process():
         if longitude > max_lon:
             max_lon = longitude
         if max_speed is None:
-            max_speed = row['speed']
-        if row['speed'] > max_speed:
-            max_speed = row['speed']
+            max_speed = speed
+        if speed > max_speed:
+            max_speed = speed
         if max_gps_speed is None:
             max_gps_speed = gps_speed
         if gps_speed > max_gps_speed:
             max_gps_speed = gps_speed
         if max_pwm is None:
-            max_pwm = row['pwm']
-        if row['pwm'] > max_gps_speed:
-            max_pwm = row['pwm']
+            max_pwm = pwm
+        if pwm > max_gps_speed:
+            max_pwm = pwm
     gpx_rows = [
         '<?xml version="1.0"?>',
         '<gpx version="1.1"',
