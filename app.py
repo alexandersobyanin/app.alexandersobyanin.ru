@@ -87,11 +87,30 @@ def csv_to_gpx_process():
     for row in csv.reader(file.stream):
         debug_rows.append(row)
     return Response(response=debug_rows, content_type='text/html; charset=UTF-8;', status=200)
-
+    gpx_rows = [
+        '<?xml version="1.0"?>',
+        '<gpx version="1.1"',
+        ' creator="CSV to GPX - https://app.alexandersobyanin.ru/csv_to_gpx/"',
+        ' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"',
+        ' xmlns="http://www.topografix.com/GPX/1/1"',
+        ' xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd">',
+        ' <metadata>',
+        f'  <time>{start_time}</time>',
+        f'  <bounds minlat="{min_lat}" minlon="{min_lon}" maxlat="{max_lat}" maxlon="{max_lon}"/>',
+        ' </metadata>',
+        ' <trk>',
+        f'  <name>{file.replace(".csv", "")}</name>',
+        '  <trkseg>',
+    ]
+    gpx_rows.extend([
+        '  </trkseg>',
+        ' </trk>',
+        '</gpx>'
+    ])
     return app.response_class(
         generate_gpx(),
         mimetype='application/gpx+xml',
-        headers={'Content-Disposition': "attachment; filename=track.gpx"}
+        headers={'Content-Disposition': f'attachment; filename={file.replace(".csv", ".gpx")}'}
     )
 
 
