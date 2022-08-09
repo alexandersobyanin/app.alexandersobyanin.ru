@@ -101,6 +101,7 @@ def csv_to_gpx_process():
         gps_speed = float(row['gps_speed'])
         speed = float(row['speed'])
         pwm = float(row['pwm'])
+        temperature = float(row['system_temp'])
         if start_time is None:
             start_time = datetime.datetime.strptime(f"{row['date']} {row['time']}", '%Y-%m-%d %H:%M:%S.%f')
         if min_lat is None:
@@ -131,6 +132,10 @@ def csv_to_gpx_process():
             max_pwm = pwm
         if pwm > max_gps_speed:
             max_pwm = pwm
+        if max_temperature is None:
+            max_temperature = temperature
+        if temperature > max_temperature:
+            max_temperature = temperature
     gpx_rows = [
         '<?xml version="1.0"?>',
         '<gpx version="1.1"',
@@ -146,7 +151,7 @@ def csv_to_gpx_process():
         f'  <bounds minlat="{min_lat}" minlon="{min_lon}" maxlat="{max_lat}" maxlon="{max_lon}"/>',
         ' </metadata>',
         ' <trk>',
-        f'  <name>{file.filename.replace(".csv", "")} speed={max_gps_speed} pwm={max_pwm}</name>',
+        f'  <name>{file.filename.replace(".csv", "")} speed={max_gps_speed} pwm={max_pwm} temperature={max_temperature}</name>',
         '  <trkseg>',
     ]
     file.seek(0)
