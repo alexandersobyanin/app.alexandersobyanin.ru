@@ -93,6 +93,7 @@ def csv_to_gpx_process():
     max_speed = None
     max_gps_speed = None
     max_pwm = None
+    max_temperature = None
     file.seek(0)
     csv_reader = csv.DictReader(codecs.iterdecode(file, 'utf-8'))
     for row in csv_reader:
