@@ -84,7 +84,7 @@ def csv_to_gpx_process():
     if file and file.filename.rsplit('.', 1)[1].lower() != 'csv':
         return Response(response='No allowed file', status=400)
     debug_rows = []
-    for row in csv.reader(file.stream):
+    for row in csv.reader(iter(file.stream.readline, '')):
         debug_rows.append(row)
     return Response(response=debug_rows, content_type='text/html; charset=UTF-8;', status=200)
     gpx_rows = [
