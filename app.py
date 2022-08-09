@@ -1,4 +1,5 @@
 #!python3
+import csv
 import os
 import json
 import socket
@@ -82,9 +83,11 @@ def csv_to_gpx_process():
         return Response(response='No selected file', status=400)
     if file and file.filename.rsplit('.', 1)[1].lower() != 'csv':
         return Response(response='No allowed file', status=400)
-    csv_stream = file.stream
-    csv_stream.seek(0)
-    gpx_rows = [f'filename={file.filename}', ]
+    debug_rows = []
+    for row in csv.reader(file.stream):
+        debug_rows.append(row)
+    return Response(response=debug_rows, content_type='text/html; charset=UTF-8;', status=200)
+
     return app.response_class(
         generate_gpx(),
         mimetype='application/gpx+xml',
