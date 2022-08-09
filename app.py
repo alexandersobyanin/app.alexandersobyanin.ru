@@ -86,7 +86,7 @@ def csv_to_gpx_process():
         return Response(response='No allowed file', status=400)
     debug_rows = []
     file.seek(0)
-    for row in csv.reader(csv.DictReader(codecs.iterdecode(file, 'utf-8'))):
+    for row in csv.DictReader(codecs.iterdecode(file, 'utf-8')):
         debug_rows.append(row)
     return Response(response=debug_rows, content_type='text/html; charset=UTF-8;', status=200)
     gpx_rows = [
