@@ -74,7 +74,7 @@ def csv_to_gpx_form():
 def csv_to_gpx_process():
     def generate_gpx():
         for row in gpx_rows:
-            yield f"{','.join(row)}\n"
+            yield f"{row}\n"
     if 'csvSelect' not in request.files:
         return Response(response='No file part', status=400)
     file = request.files['csvSelect']
