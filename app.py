@@ -1,6 +1,7 @@
 #!python3
 import codecs
 import csv
+import datetime
 import os
 import json
 import socket
@@ -84,11 +85,47 @@ def csv_to_gpx_process():
         return Response(response='No selected file', status=400)
     if file and file.filename.rsplit('.', 1)[1].lower() != 'csv':
         return Response(response='No allowed file', status=400)
-    debug_rows = []
+    start_time = None
+    min_lat = None
+    min_lon = None
+    max_lat = None
+    max_lon = None
+    max_speed = None
+    max_gps_speed = None
+    max_pwm = None
     file.seek(0)
-    for row in csv.DictReader(codecs.iterdecode(file, 'utf-8')):
-        debug_rows.append(row)
-    return Response(response=debug_rows, content_type='text/html; charset=UTF-8;', status=200)
+    csv_reader = csv.DictReader(codecs.iterdecode(file, 'utf-8'))
+    for row in csv_reader:
+        if start_time is None:
+            start_time = datetime.datetime.strptime(f"{row['date']} {row['time']}", '%Y-%m-%d %H:%M:%S.%f')
+        if min_lat is None:
+            min_lat = row['latitude']
+        if row['latitude'] < min_lat:
+            min_lat = row['latitude']
+        if max_lat is None:
+            max_lat = row['latitude']
+        if row['latitude'] > max_lat:
+            max_lat = row['latitude']
+        if min_lon is None:
+            min_lon = row['longitude']
+        if row['longitude'] < min_lon:
+            min_lon = row['longitude']
+        if max_lon is None:
+            max_lon = row['longitude']
+        if row['longitude'] > max_lon:
+            max_lon = row['longitude']
+        if max_speed is None:
+            max_speed = row['speed']
+        if row['speed'] > max_speed:
+            max_speed = row['speed']
+        if max_gps_speed is None:
+            max_gps_speed = row['gps_speed']
+        if row['gps_speed'] > max_gps_speed:
+            max_gps_speed = row['gps_speed']
+        if max_pwm is None:
+            max_pwm = row['pwm']
+        if row['pwm'] > max_gps_speed:
+            max_pwm = row['pwm']
     gpx_rows = [
         '<?xml version="1.0"?>',
         '<gpx version="1.1"',
@@ -97,7 +134,7 @@ def csv_to_gpx_process():
         ' xmlns="http://www.topografix.com/GPX/1/1"',
         ' xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd">',
         ' <metadata>',
-        f'  <time>{start_time}</time>',
+        f'  <time>{start_time.isoformat()}</time>',
         f'  <bounds minlat="{min_lat}" minlon="{min_lon}" maxlat="{max_lat}" maxlon="{max_lon}"/>',
         ' </metadata>',
         ' <trk>',
