@@ -96,32 +96,35 @@ def csv_to_gpx_process():
     file.seek(0)
     csv_reader = csv.DictReader(codecs.iterdecode(file, 'utf-8'))
     for row in csv_reader:
+        latitude = float(row['latitude'])
+        longitude = float(row['longitude'])
+        gps_speed = float(row['gps_speed'])
         if start_time is None:
             start_time = datetime.datetime.strptime(f"{row['date']} {row['time']}", '%Y-%m-%d %H:%M:%S.%f')
         if min_lat is None:
-            min_lat = row['latitude']
-        if row['latitude'] < min_lat:
-            min_lat = row['latitude']
+            min_lat = latitude
+        if latitude < min_lat:
+            min_lat = latitude
         if max_lat is None:
-            max_lat = row['latitude']
-        if row['latitude'] > max_lat:
-            max_lat = row['latitude']
+            max_lat = latitude
+        if latitude > max_lat:
+            max_lat = latitude
         if min_lon is None:
-            min_lon = row['longitude']
-        if row['longitude'] < min_lon:
-            min_lon = row['longitude']
+            min_lon = longitude
+        if longitude < min_lon:
+            min_lon = longitude
         if max_lon is None:
-            max_lon = row['longitude']
-        if row['longitude'] > max_lon:
-            max_lon = row['longitude']
+            max_lon = longitude
+        if longitude > max_lon:
+            max_lon = longitude
         if max_speed is None:
             max_speed = row['speed']
         if row['speed'] > max_speed:
             max_speed = row['speed']
         if max_gps_speed is None:
-            max_gps_speed = row['gps_speed']
-        if row['gps_speed'] > max_gps_speed:
-            max_gps_speed = row['gps_speed']
+            max_gps_speed = gps_speed
+        if gps_speed > max_gps_speed:
+            max_gps_speed = gps_speed
         if max_pwm is None:
             max_pwm = row['pwm']
         if row['pwm'] > max_gps_speed:
