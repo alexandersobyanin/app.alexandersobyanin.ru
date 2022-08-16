@@ -17,7 +17,7 @@ global_context.update(environment_variables)
 
 @csv_to_gpx.route('/', methods=['GET'])
 def csv_to_gpx_form():
-    return render_template('csv_to_gpx/form.html', **global_context)
+    return render_template('form.html', **global_context)
 
 
 @csv_to_gpx.route('/', methods=['POST'])
