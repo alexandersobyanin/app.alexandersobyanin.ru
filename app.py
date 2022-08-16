@@ -1,24 +1,19 @@
 #!python3
 import os
 import json
-import socket
-import urllib.error
-import urllib.parse
-import urllib.request
 from flask import Flask
-from flask import Response
-from flask import request
 from flask import render_template
 from flask_sslify import SSLify
 from flask_cors import cross_origin
-from werkzeug.utils import secure_filename
 
 from environment_variables import environment_variables
 from environment_variables import SEO
 from csv_to_gpx.csv_to_gpx import csv_to_gpx
+from tracker_announce.tracker_announce import tracker_announce
 
 app = Flask(__name__, static_url_path='/static')
 app.register_blueprint(csv_to_gpx, url_prefix='/csv_to_gpx')
+app.register_blueprint(tracker_announce, url_prefix='/tracker_announce')
 app.debug = False
 sslify = SSLify(app)
 
@@ -48,26 +43,6 @@ def certbot(certbot_key):
     if not certbot_pass:
         return 'FAILED'
     return '{}.{}'.format(certbot_key, certbot_pass)
-
-
-@app.route('/tracker_announce/<path:tracker_path>', methods=['GET'])
-def tracker_announce(tracker_path):
-    pass_key = request.args.get('pk')
-    if pass_key != os.environ.get('tracker_pass_key'):
-        return Response(response='Unauthorized', status=401)
-    params = urllib.parse.urlencode(request.args)
-    url = f'http://{tracker_path}?{params}'
-    return Response(response=f'url={url}', status=200)
-    try:
-        with urllib.request.urlopen(url, timeout=1) as response:
-            response_code = response.status
-            response_content = response.read()
-            response_content_type = response.getheader('Content-Type')
-    except (urllib.error.HTTPError, urllib.error.URLError, socket.timeout) as e:
-        response_code = 200
-        response_content = f'We failed to reach a tracker: {e}'
-        response_content_type = 'text/html; charset=UTF-8;'
-    return Response(response=response_content, content_type=response_content_type, status=response_code)
 
 
 if __name__ == '__main__':
