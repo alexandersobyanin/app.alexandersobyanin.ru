@@ -17,7 +17,7 @@ global_context.update(environment_variables)
 
 
 @tracker_announce.route('/<path:tracker_path>', methods=['GET'])
-def tracker_announce(tracker_path):
+def tracker_announce_process_path(tracker_path):
     pass_key = request.args.get('pk')
     if pass_key != os.environ.get('tracker_pass_key'):
         return Response(response='Unauthorized', status=401)
