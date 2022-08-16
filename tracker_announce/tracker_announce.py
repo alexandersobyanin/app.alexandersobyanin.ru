@@ -23,9 +23,12 @@ def tracker_announce_process_path(tracker_path):
         return Response(response='Unauthorized', status=401)
     params = urllib.parse.urlencode(request.args)
     url = f'http://{tracker_path}?{params}'
-    return Response(response=f'url={url}', status=200)
     try:
-        with urllib.request.urlopen(url, timeout=1) as response:
+        tracker_request = urllib.request.Request(
+            url,
+            headers={'User-Agent': request.headers.get('User-Agent')}
+        )
+        with urllib.request.urlopen(tracker_request, timeout=20) as response:
             response_code = response.status
             response_content = response.read()
             response_content_type = response.getheader('Content-Type')
