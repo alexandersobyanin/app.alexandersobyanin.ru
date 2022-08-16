@@ -26,7 +26,7 @@ def tracker_announce_process_path(tracker_path):
     try:
         tracker_request = urllib.request.Request(
             url,
-            headers={'User-Agent': request.headers.get('User-Agent')}
+            headers=request.headers
         )
         with urllib.request.urlopen(tracker_request, timeout=20) as response:
             response_code = response.status
@@ -34,6 +34,6 @@ def tracker_announce_process_path(tracker_path):
             response_content_type = response.getheader('Content-Type')
     except (urllib.error.HTTPError, urllib.error.URLError, socket.timeout) as e:
         response_code = 200
-        response_content = f'We failed to reach a tracker: {e}'
-        response_content_type = 'text/html; charset=UTF-8;'
+        response_content = f'We failed to reach a tracker: {e}. URL: {url}. Headers: {request.headers}.'
+        response_content_type = 'text/plain; charset=UTF-8;'
     return Response(response=response_content, content_type=response_content_type, status=response_code)
