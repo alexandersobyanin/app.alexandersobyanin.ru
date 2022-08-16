@@ -13,7 +13,8 @@ from flask_sslify import SSLify
 from flask_cors import cross_origin
 from werkzeug.utils import secure_filename
 
-from seo import SEO
+from environment_variables import environment_variables
+from environment_variables import SEO
 from csv_to_gpx.csv_to_gpx import csv_to_gpx
 
 app = Flask(__name__, static_url_path='/static')
@@ -21,11 +22,8 @@ app.register_blueprint(csv_to_gpx, url_prefix='/csv_to_gpx')
 app.debug = False
 sslify = SSLify(app)
 
-global_context = {
-    'SEO': SEO,
-    'YANDEX_METRIKA': os.environ.get('YANDEX_METRIKA'),
-    'GOOGLE_ANALYTICS': os.environ.get('GOOGLE_ANALYTICS')
-}
+global_context = {}
+global_context.update(environment_variables)
 
 
 @app.route('/', methods=['GET'])

@@ -7,9 +7,12 @@ from flask import Response
 from flask import request
 from flask import render_template
 
-from app import global_context
+from environment_variables import environment_variables
 
 csv_to_gpx = Blueprint('csv_to_gpx', __name__, template_folder='templates')
+
+global_context = {}
+global_context.update(environment_variables)
 
 
 @csv_to_gpx.route('/', methods=['GET'])
