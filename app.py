@@ -21,7 +21,11 @@ app = Flask(__name__, static_url_path='/static')
 app.debug = False
 sslify = SSLify(app)
 
-global_context = {'SEO': SEO}
+global_context = {
+    'SEO': SEO,
+    'YANDEX_METRIKA': os.environ.get('YANDEX_METRIKA'),
+    'GOOGLE_ANALYTICS': os.environ.get('GOOGLE_ANALYTICS')
+}
 
 
 @app.route('/', methods=['GET'])
