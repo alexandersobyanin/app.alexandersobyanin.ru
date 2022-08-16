@@ -10,7 +10,7 @@ from flask import request
 
 from environment_variables import environment_variables
 
-tracker_announce = Blueprint('csv_to_gpx', __name__)
+tracker_announce = Blueprint('tracker_announce', __name__)
 
 global_context = {}
 global_context.update(environment_variables)
