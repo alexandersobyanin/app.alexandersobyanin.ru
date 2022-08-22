@@ -6,6 +6,7 @@ from flask import Blueprint
 from flask import Response
 from flask import request
 from flask import render_template
+from flask import stream_with_context
 
 from environment_variables import environment_variables
 
@@ -122,8 +123,8 @@ def csv_to_gpx_process():
         ' </trk>',
         '</gpx>'
     ])
-    return csv_to_gpx.response_class(
-        generate_gpx(),
+    return Response(
+        stream_with_context(generate_gpx()),
         mimetype='application/gpx+xml',
         headers={'Content-Disposition': f'attachment; filename={file.filename.replace(".csv", ".gpx")}'}
     )
