@@ -8,6 +8,7 @@ from flask import render_template
 from flask import url_for
 from flask_sslify import SSLify
 from flask_cors import cross_origin
+from werkzeug.exceptions import HTTPException
 
 from environment_variables import environment_variables
 from environment_variables import SEO
@@ -26,8 +27,17 @@ global_context.update(environment_variables)
 
 
 @app.errorhandler(Exception)
-def not_found(error):
-    return render_template('error.html', error=error, **global_context)
+def handle_exception(error):
+    # pass through HTTP errors
+    if isinstance(error, HTTPException):
+        return error
+    # now you're handling non-HTTP exceptions only
+    return render_template("error.html", error=error, **global_context), 500
+
+
+@app.errorhandler(HTTPException)
+def handle_exception_http(error):
+    return render_template('error.html', error=error, **global_context), error.code
 
 
 @app.route('/', methods=['GET'])
