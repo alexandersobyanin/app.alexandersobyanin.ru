@@ -49,7 +49,7 @@ def certbot(certbot_key):
 
 @app.route('/csv_to_gpx/', methods=['GET'])
 def csv_to_gpx():
-    return redirect(url_for('wheellog_csv.wheellog_csv_form'))
+    return redirect(url_for('wheellog_csv.wheellog_csv_form'), code=301)
 
 
 if __name__ == '__main__':
