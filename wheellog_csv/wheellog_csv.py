@@ -10,18 +10,18 @@ from flask import stream_with_context
 
 from environment_variables import environment_variables
 
-csv_to_gpx = Blueprint('csv_to_gpx', __name__, template_folder='templates')
+wheellog_csv = Blueprint('wheellog_csv', __name__, template_folder='templates')
 
 global_context = {}
 global_context.update(environment_variables)
 
 
-@csv_to_gpx.route('/', methods=['GET'])
-def csv_to_gpx_form():
+@wheellog_csv.route('/', methods=['GET'])
+def wheellog_csv_form():
     return render_template('form.html', **global_context)
 
 
-@csv_to_gpx.route('/', methods=['POST'])
+@wheellog_csv.route('/csv_to_gpx', methods=['POST'])
 def csv_to_gpx_process():
     def generate_gpx():
         for _row in gpx_rows:

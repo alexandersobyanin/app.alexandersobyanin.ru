@@ -2,17 +2,19 @@
 import os
 import json
 from flask import Flask
+from flask import redirect
 from flask import render_template
+from flask import url_for
 from flask_sslify import SSLify
 from flask_cors import cross_origin
 
 from environment_variables import environment_variables
 from environment_variables import SEO
-from csv_to_gpx.csv_to_gpx import csv_to_gpx
+from wheellog_csv.wheellog_csv import wheellog_csv
 from tracker_announce.tracker_announce import tracker_announce
 
 app = Flask(__name__, static_url_path='/static')
-app.register_blueprint(csv_to_gpx, url_prefix='/csv_to_gpx')
+app.register_blueprint(wheellog_csv, url_prefix='/wheellog_csv')
 app.register_blueprint(tracker_announce, url_prefix='/tracker_announce')
 app.debug = False
 sslify = SSLify(app)
@@ -43,6 +45,11 @@ def certbot(certbot_key):
     if not certbot_pass:
         return 'FAILED'
     return '{}.{}'.format(certbot_key, certbot_pass)
+
+
+@app.route('/csv_to_gpx', methods=['GET'])
+def csv_to_gpx():
+    return redirect(url_for('wheellog_csv.wheellog_csv_form'))
 
 
 if __name__ == '__main__':
