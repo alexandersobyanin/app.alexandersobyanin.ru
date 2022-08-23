@@ -2,6 +2,7 @@
 import codecs
 import csv
 import datetime
+from flask import flash
 from flask import Blueprint
 from flask import Response
 from flask import request
@@ -18,6 +19,7 @@ global_context.update(environment_variables)
 
 @wheellog_csv.route('/', methods=['GET'])
 def wheellog_csv_form():
+    flash('Debug', 'debug')
     return render_template('form.html', **global_context)
 
 
