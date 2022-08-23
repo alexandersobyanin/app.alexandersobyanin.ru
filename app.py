@@ -27,7 +27,7 @@ global_context.update(environment_variables)
 
 @app.errorhandler(404)
 def not_found(error):
-    return render_template('error.html', error, **global_context), 404
+    return render_template('error.html', error=error, **global_context), 404
 
 
 @app.route('/', methods=['GET'])
