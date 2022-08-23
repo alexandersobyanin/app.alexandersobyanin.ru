@@ -1,6 +1,7 @@
 #!python3
 import os
 import json
+from flask import flash
 from flask import Flask
 from flask import redirect
 from flask import render_template
@@ -50,6 +51,7 @@ def certbot(certbot_key):
 
 @app.route('/csv_to_gpx/', methods=['GET'])
 def csv_to_gpx():
+    flash('csv_to_gpx moved to wheellog_csv', 'info')
     return redirect(url_for('wheellog_csv.wheellog_csv_form'), code=301)
 
 
