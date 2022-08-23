@@ -25,7 +25,7 @@ global_context = {}
 global_context.update(environment_variables)
 
 
-@app.errorhandler()
+@app.errorhandler(Exception)
 def not_found(error):
     return render_template('error.html', error=error, **global_context)
 
