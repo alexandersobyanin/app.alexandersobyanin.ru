@@ -1,12 +1,13 @@
 {% extends 'base.html' %}
 
 {% block title %}
-    WheelLog CSV Viewer
+    WheelLog CSV Tools
 {% endblock %}
 
 {% block content %}
+    <h1>WheelLog CSV Tools</h1>
     <div>
-        <h1>CSV to GPX</h1>
+        <h2>CSV to GPX</h2>
         <form action="{{ url_for('wheellog_csv.csv_to_gpx') }}" method="post" enctype="multipart/form-data">
             <label for="csvSelect">CSV</label>
             <input type="file" accept=".csv, text/plain" id="csvSelect" name="csvSelect"/>
