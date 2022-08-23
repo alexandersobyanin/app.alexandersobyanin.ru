@@ -16,6 +16,7 @@ from tracker_announce.tracker_announce import tracker_announce
 app = Flask(__name__, static_url_path='/static')
 app.register_blueprint(wheellog_csv, url_prefix='/wheellog_csv')
 app.register_blueprint(tracker_announce, url_prefix='/tracker_announce')
+app.secret_key = os.environ.get('FLASK_SECRET_KEY')
 app.debug = False
 sslify = SSLify(app)
 
