@@ -5,10 +5,12 @@ WheelLog CSV Viewer
 {% endblock %}
 
 {% block content %}
-<h1>CSV to GPX</h1>
-<form action="{{ url_for('wheellog_csv.csv_to_gpx') }}" method="post" enctype="multipart/form-data">
-    <label for="csvSelect">CSV</label>
-    <input type="file" accept=".csv, text/plain" id="csvSelect" name="csvSelect"/>
-    <input type="submit">
-</form>
+    <div>
+        <h1>CSV to GPX</h1>
+        <form action="{{ url_for('wheellog_csv.csv_to_gpx') }}" method="post" enctype="multipart/form-data">
+            <label for="csvSelect">CSV</label>
+            <input type="file" accept=".csv, text/plain" id="csvSelect" name="csvSelect"/>
+            <input type="submit">
+        </form>
+    </div>
 {% endblock %}
