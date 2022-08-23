@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    app.alexandersobyanin.ru
+{% endblock %}
+
+{% block content %}
+    <h1>app.alexandersobyanin.ru</h1>
+    <p>The requested URL {{ url_for(request.endpoint) }} not found</p>
+    <a href="https://alexandersobyanin.ru">Back to main page</a>
+{% endblock %}
