@@ -6,6 +6,6 @@
 
 {% block content %}
     <h1>app.alexandersobyanin.ru</h1>
-    <p>The requested URL {{ url_for(request.endpoint) }} not found: {{ error.code }} {{ error.name }} {{ error.description }}</p>
+    <p>The requested URL {{ request.url }} not found: {{ error.code }} {{ error.name }} {{ error.description }}</p>
     <a href="https://alexandersobyanin.ru">Back to main page</a>
 {% endblock %}
