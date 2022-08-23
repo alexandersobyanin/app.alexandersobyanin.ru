@@ -23,7 +23,7 @@ def wheellog_csv_form():
 
 
 @wheellog_csv.route('/csv_to_gpx', methods=['POST'])
-def csv_to_gpx_process():
+def csv_to_gpx():
     def generate_gpx():
         for _row in gpx_rows:
             yield f"{_row}\n"
