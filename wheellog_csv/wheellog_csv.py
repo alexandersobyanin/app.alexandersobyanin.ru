@@ -34,6 +34,7 @@ def csv_to_gpx():
     def generate_gpx():
         for _row in gpx_rows:
             yield f"{_row}\n"
+
     if 'csvSelect' not in request.files:
         return Response(response='No file part', status=400)
     file = request.files['csvSelect']
