@@ -4,10 +4,12 @@ import csv
 import datetime
 from flask import flash
 from flask import Blueprint
+from flask import redirect
 from flask import Response
 from flask import request
 from flask import render_template
 from flask import stream_with_context
+from flask import url_for
 
 from environment_variables import environment_variables
 
@@ -20,6 +22,11 @@ global_context.update(environment_variables)
 @wheellog_csv.route('/', methods=['GET'])
 def wheellog_csv_form():
     return render_template('form.html', **global_context)
+
+
+@wheellog_csv.route('/csv_to_gpx', methods=['GET'])
+def csv_to_gpx_get():
+    return redirect(url_for('wheellog_csv.wheellog_csv_form'), code=301)
 
 
 @wheellog_csv.route('/csv_to_gpx', methods=['POST'])
