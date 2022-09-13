@@ -1,5 +1,7 @@
 #!python3
+import logging
 import os
+import sys
 import json
 from flask import flash
 from flask import Flask
@@ -16,6 +18,8 @@ from wheellog_csv.wheellog_csv import wheellog_csv
 from tracker_announce.tracker_announce import tracker_announce
 
 app = Flask(__name__, static_url_path='/static')
+app.logger.addHandler(logging.StreamHandler(sys.stdout))
+app.logger.setLevel(logging.WARNING)
 app.register_blueprint(wheellog_csv, url_prefix='/wheellog_csv')
 app.register_blueprint(tracker_announce, url_prefix='/tracker_announce')
 app.secret_key = os.environ.get('FLASK_SECRET_KEY')
