@@ -131,8 +131,9 @@ def csv_to_gpx():
         ' </trk>',
         '</gpx>'
     ])
+    output_filename = file.filename.replace(".csv", ".gpx")
     return Response(
         stream_with_context(generate_gpx()),
         mimetype='application/gpx+xml',
-        headers={'Content-Disposition': f'attachment; filename={file.filename.replace(".csv", ".gpx")}'}
+        headers={'Content-Disposition': f'attachment; filename={output_filename}'}
     )
