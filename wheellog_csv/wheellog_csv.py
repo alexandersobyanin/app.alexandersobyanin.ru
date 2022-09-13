@@ -136,7 +136,7 @@ def csv_to_gpx():
     try:
         output_filename.encode('latin-1')
     except UnicodeEncodeError:
-        output_filename = 'unsupported_filename'
+        output_filename = 'unsupported_filename.gpx'
     return Response(
         stream_with_context(generate_gpx()),
         mimetype='application/gpx+xml',
