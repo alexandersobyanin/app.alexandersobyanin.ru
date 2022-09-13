@@ -133,9 +133,9 @@ def csv_to_gpx():
     ])
     output_filename = file.filename.replace(".csv", ".gpx")
     try:
-        output_filename = output_filename.encode('latin-1')
+        output_filename.encode('latin-1')
     except UnicodeEncodeError:
-        output_filename = f'unsupported_filename_{output_filename}'.encode('latin-1', 'ignore')
+        output_filename = 'unsupported_filename'
     return Response(
         stream_with_context(generate_gpx()),
         mimetype='application/gpx+xml',
