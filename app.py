@@ -1,8 +1,9 @@
 #!python3
+import json
 import logging
 import os
 import sys
-import json
+import traceback
 from flask import flash
 from flask import Flask
 from flask import redirect
@@ -32,6 +33,8 @@ global_context.update(environment_variables)
 
 @app.errorhandler(Exception)
 def handle_exception(error):
+    logging.exception(error)
+    logging.error('traceback: %s' % traceback.format_exception(*sys.exc_info()))
     # pass through HTTP errors
     if isinstance(error, HTTPException):
         return error
@@ -41,6 +44,8 @@ def handle_exception(error):
 
 @app.errorhandler(HTTPException)
 def handle_exception_http(error):
+    logging.exception(error)
+    logging.error('traceback: %s' % traceback.format_exception(*sys.exc_info()))
     return render_template('error.html', error=error, **global_context), error.code
 
 
