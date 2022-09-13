@@ -2,14 +2,17 @@
 import codecs
 import csv
 import datetime
+import unicodedata
 from flask import flash
 from flask import Blueprint
 from flask import redirect
 from flask import Response
 from flask import request
 from flask import render_template
+from flask import send_file
 from flask import stream_with_context
 from flask import url_for
+from werkzeug.urls import url_quote
 
 from environment_variables import environment_variables
 
@@ -37,9 +40,14 @@ def csv_to_gpx():
     if 'csvSelect' not in request.files:
         return Response(response='No file part', status=400)
     file = request.files['csvSelect']
-    if file.filename == '':
+    try:
+        filename = file.filename.encode('latin-1')
+    except UnicodeEncodeError:
+        filename = unicodedata.normalize('NFKD', file.filename).encode('latin-1', 'ignore'),
+        filename = "UTF-8''{}".format(url_quote(filename))
+    if filename == '':
         return Response(response='No selected file', status=400)
-    if file and file.filename.rsplit('.', 1)[1].lower() != 'csv':
+    if file and filename.rsplit('.', 1)[1].lower() != 'csv':
         return Response(response='No allowed file', status=400)
     start_time = None
     min_lat = None
@@ -108,7 +116,7 @@ def csv_to_gpx():
         f'  <bounds minlat="{min_lat}" minlon="{min_lon}" maxlat="{max_lat}" maxlon="{max_lon}"/>',
         ' </metadata>',
         ' <trk>',
-        f'  <name>{file.filename.replace(".csv", "")} speed={max_gps_speed} pwm={max_pwm} temperature={max_temperature}</name>',
+        f'  <name>{filename.replace(".csv", "")} speed={max_gps_speed} pwm={max_pwm} temperature={max_temperature}</name>',
         '  <trkseg>',
     ]
     file.seek(0)
@@ -134,5 +142,5 @@ def csv_to_gpx():
     return Response(
         stream_with_context(generate_gpx()),
         mimetype='application/gpx+xml',
-        headers={'Content-Disposition': f'attachment; filename={file.filename.replace(".csv", ".gpx")}'}
+        headers={'Content-Disposition': f'attachment; filename={filename.replace(".csv", ".gpx")}'}
     )
